@@ -36,15 +36,6 @@ public class BaseInitData {
     @Bean
     @Order(2)
     public ApplicationRunner applicationRunner2() {
-//        return args -> {
-//            Post post = postService.findById(1L).get();
-//
-//            Thread.sleep(1000);
-//
-//            postService.modify(post, "new title", "new body");
-////            postService.modify2(1L, "new title2", "new body2");
-//        };
-
         return new ApplicationRunner() {
             @Override
             @Transactional
@@ -52,6 +43,46 @@ public class BaseInitData {
                 Post post = postService.findById(1L).get();
                 Thread.sleep(1000);
                 postService.modify(post, "new title1212", "new body1212");
+            }
+        };
+    }
+
+    @Bean
+    @Order(3)
+    public ApplicationRunner applicationRunner3() {
+        return new ApplicationRunner() {
+            @Override
+            @Transactional
+            public void run(ApplicationArguments args) throws Exception {
+                Post p1 = postService.findById(1L).get();
+                Post p2 = postService.findById(1L).get();
+
+//                postService.delete(p1);
+//                postService.delete(p2);
+
+                System.out.println("=======p1 삭제========");
+                postService.deleteById(1L);
+                System.out.println("=======p1 삭제 완료========");
+                System.out.println("=======p2 삭제========");
+                postService.deleteById(2L);
+                System.out.println("=======p2 삭제 완료========");
+            }
+        };
+    }
+
+    @Bean
+    @Order(4)
+    public ApplicationRunner applicationRunner4() {
+        return new ApplicationRunner() {
+            @Override
+            @Transactional
+            public void run(ApplicationArguments args) throws Exception {
+                Post post = postService.findById(3L).get();
+
+                System.out.println(post.getId() + "번 포스트를 가져왔습니다.");
+
+                Post post2 = postService.findById(3L).get();
+                System.out.println(post2.getId() + "번 포스트를 가져왔습니다.");
             }
         };
     }
