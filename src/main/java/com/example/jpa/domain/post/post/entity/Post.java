@@ -1,21 +1,27 @@
 package com.example.jpa.domain.post.post.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Post {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private LocalDate createdDate;
-    private LocalDate modifiedDate;
+    @Id // PRIMARY KEY
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
+    private Long id; // long -> null X, Long -> null O
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
+    @Column(length = 100)
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String body;
-
 }
