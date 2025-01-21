@@ -55,7 +55,10 @@ public class BaseInitData {
                 // 2번 방식 -> 훨씬 객체지향적(자바스럽다)
                 post.addComment(c5);// comment1 댓글을 세팅
 
-
+//                long parentID = c5.getPostId();
+//                Post parent = postService.findById(parentID).get();
+//
+//                System.out.println(parent.getTitle());
             }
         };
     }
