@@ -6,6 +6,9 @@ spring:
     ansi:
       enabled: always
 
+  pofiles:
+    active: test
+
   datasource:
     url: jdbc:h2:./db_dev;MODE=MySQL
     username: sa
