@@ -4,14 +4,13 @@ package com.example.jpa.domain.post.post.entity;
 import com.example.jpa.domain.member.entity.Member;
 import com.example.jpa.domain.post.comment.entity.Comment;
 import com.example.jpa.domain.post.tag.entity.Tag;
+import com.example.jpa.domain.post.tag.entity.TagId;
 import com.example.jpa.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Entity
 @Getter
@@ -44,7 +43,17 @@ public class Post extends BaseTime {
     }
 
     public void addTag(String name) {
+
+//        Optional<Tag> oldTag = tags.stream()
+//                .filter(tag -> tag.getName().equals(name))
+//                .findFirst();
+//
+//        if(oldTag.isPresent()) {
+//            return;
+//        }
+
         Tag tag = Tag.builder()
+                .id(new TagId(this.getId(), name))
                 .name(name)
                 .post(this)
                 .build();
