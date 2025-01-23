@@ -1,5 +1,6 @@
 package com.example.jpa.domain.post.post.service;
 
+import com.example.jpa.domain.member.entity.Member;
 import com.example.jpa.domain.post.post.entity.Post;
 import com.example.jpa.domain.post.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,10 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public Post write(String title, String body) {
+    public Post write(Member author, String title, String body) {
 
         Post post = Post.builder()
+                .author(author)
                 .title(title)
                 .body(body)
                 .build();
@@ -91,5 +93,9 @@ public class PostService {
 
     public List<Post> findTop2ByTitleOrderByIdDesc(String title) {
         return postRepository.findTop2ByTitleOrderByIdDesc(title);
+    }
+
+    public List<Post> findByAuthorUsername(String username) {
+        return postRepository.findByAuthorUsername(username);
     }
 }

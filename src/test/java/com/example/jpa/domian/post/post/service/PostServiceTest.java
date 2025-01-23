@@ -1,5 +1,7 @@
 package com.example.jpa.domain.post.post.service;
 
+import com.example.jpa.domain.member.entity.Member;
+import com.example.jpa.domain.member.service.MemberService;
 import com.example.jpa.domain.post.post.entity.Post;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,12 +27,18 @@ public class PostServiceTest {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private MemberService memberService;
+
     @Test
     @DisplayName("글 2개 작성")
     @Transactional
     public void t1() {
-        postService.write("title1", "body1");
-        postService.write("title2", "body2");
+
+        Member user1 = memberService.findByUsername("user1").get();
+
+        postService.write(user1, "title1", "body1");
+        postService.write(user1, "title2", "body2");
     }
 
     @Test
@@ -168,5 +176,59 @@ public class PostServiceTest {
         assertEquals(1, postPage.getTotalPages()); // 전체 페이지 수
         assertEquals(3, postPage.getNumberOfElements()); // 현재 페이지에 노출된 글 수
         assertEquals(pageNumber, postPage.getNumber()); // 현재 페이지 번호
+    }
+
+    @Test
+    @DisplayName("회원 정보로 글 조회")
+    void t13() {
+
+        // 회원 아이디로 회원이 작성한 글 목록 가져오기
+        // SELECT * FROM post p WHERE INNER JOIN member m ON p.member_id = m.id where username = 'user1';
+
+        // post에서 member 정보가 필요할 때 방법
+        // 1. post를 먼저 조회해서 member id를 알아온 후 -> member 조회 -> select 2번 조회
+        // 2. post랑 member를 붙여서 같이 조회 -> join
+
+//        Member user1 = memberService.findByUsername("user1").get();
+        List<Post> posts = postService.findByAuthorUsername("user1");
+
+        assertThat(posts.size()).isEqualTo(2);
+
+    }
+
+    @Test
+    @DisplayName("회원 정보로 글 조회2")
+    @Transactional
+    void t14() {
+
+        // 회원 아이디로 회원이 작성한 글 목록 가져오기
+        // SELECT * FROM post p WHERE INNER JOIN member m ON p.member_id = m.id where username = 'user1';
+
+        // post에서 member 정보가 필요할 때 방법
+        // 1. post를 먼저 조회해서 member id를 알아온 후 -> member 조회 -> select 2번 조회
+        // 2. post랑 member를 붙여서 같이 조회 -> join
+
+        // 대부분의 경우 JPA는 연관된 정보를 가져올 때 select를 여러번 날린다.
+
+        List<Post> posts = postService.findByAuthorUsername("user1");
+        Post post = posts.get(0);
+
+        System.out.println(post.getId() + ", " + post.getTitle());
+        System.out.println(post.getAuthor().getUsername());
+
+    }
+
+    @Test
+    @DisplayName("글목록에서 회원 정보 가져오기")
+    @Transactional
+    void t15() {
+
+        List<Post> posts = postService.findAll();
+
+        for(Post post : posts) {
+            System.out.println(post.getId() + ", " + post.getTitle() + ", " + post.getAuthor().getNickname());
+        }
+
+
     }
 }
