@@ -219,12 +219,13 @@ public class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글목록에서 회원 정보 가져오기")
+    @DisplayName("글목록에서 회원 정보 가져오기 -> N + 1 문제")
     @Transactional
     void t15() {
 
-        List<Post> posts = postService.findAll();
+        List<Post> posts = postService.findAll(); //목록 조회 sql
 
+        // 목록의 개수마다 추가 select 발생
         for(Post post : posts) {
             System.out.println(post.getId() + ", " + post.getTitle() + ", " + post.getAuthor().getNickname());
         }
