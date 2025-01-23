@@ -3,6 +3,7 @@ package com.example.jpa.domain.post.post.entity;
 
 import com.example.jpa.domain.member.entity.Member;
 import com.example.jpa.domain.post.comment.entity.Comment;
+import com.example.jpa.domain.post.tag.entity.Tag;
 import com.example.jpa.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,9 +34,22 @@ public class Post extends BaseEntity {
     @Builder.Default// mappedBy를 사용하지 않은 쪽이 주인
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @Builder.Default
+    private List<Tag> tags = new ArrayList<>();
+
     public void addComment(Comment c) {
         comments.add(c);
         c.setPost(this);
+    }
+
+    public void addTag(String name) {
+        Tag tag = Tag.builder()
+                .name(name)
+                .post(this)
+                .build();
+
+        tags.add(tag);
     }
 
     public void removeComment(Comment c1) {
